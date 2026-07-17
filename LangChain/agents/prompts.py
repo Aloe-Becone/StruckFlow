@@ -7,7 +7,7 @@
 - LLM 可以输出轻量意图提示 "need"，但路由由系统决定
 """
 
-from protocol.g2cp import AgentName
+from ..protocol.g2cp import AgentName
 
 ROLE_PROMPTS: dict[AgentName, str] = {
     "任务分配": """\

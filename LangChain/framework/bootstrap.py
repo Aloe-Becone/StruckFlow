@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from agents.workflow import MultiAgentSystem
-from framework.config import load_settings
-from framework.llm import build_chat_model
-from memory.embedding import QwenEmbeddingService
-from memory.store import JsonMemoryStore
-from tools.web_search import DisabledSearchTool, SearxngSearchTool, WebSearchConfig
+from ..agents.workflow import MultiAgentSystem
+from .config import load_settings
+from .llm import build_chat_model
+from ..memory.embedding import QwenEmbeddingService
+from ..memory.store import JsonMemoryStore
+from ..tools.web_search import DisabledSearchTool, SearxngSearchTool, WebSearchConfig
 
 
 def create_multi_agent_system(memory_path: Path) -> tuple[MultiAgentSystem, str]:

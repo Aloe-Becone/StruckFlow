@@ -1,6 +1,5 @@
 """SemanticObject 三层协议：Control + Semantic + Precise
 
-替代旧版 G2CP 扁平 JSON 包。三层物理分离，各自服务不同消费者：
 - ControlInfo：系统路由/调度/决策，零 token
 - SemanticVectors：向量检索/路由/缓存，零 token
 - PreciseStructure：LLM 执行用最小原子字段，唯一消耗 token 的层

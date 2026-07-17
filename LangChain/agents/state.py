@@ -6,7 +6,7 @@ Control/Semantic 层不序列化给 LLM，只有 Precise 层消耗 token。
 
 from typing import Any, Literal, TypedDict
 
-from protocol.g2cp import (
+from ..protocol.g2cp import (
     AgentName,
     ControlInfo,
     PreciseStructure,

@@ -13,7 +13,7 @@
 - build_text_model(): 构建无 JSON 约束的 LLM
 """
 
-from comparison.comparator import build_comparison, print_comparison_report, print_text_result
-from comparison.text_runner import TextModeRunner, build_text_model
+from .comparator import build_comparison, print_comparison_report, print_text_result
+from .text_runner import TextModeRunner, build_text_model
 
 __all__ = ["build_comparison", "print_comparison_report", "print_text_result", "TextModeRunner", "build_text_model"]

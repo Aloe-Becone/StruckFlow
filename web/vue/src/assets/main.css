@@ -1,35 +1,51 @@
 @import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+/* ── 全局布局 ── */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--sf-bg-base);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+/* ── Element Plus 暗色模式全局覆盖 ── */
+.el-menu {
+  border-right: none !important;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.el-card {
+  --el-card-bg-color: var(--sf-bg-elevated);
+  border-color: var(--sf-border-light);
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.el-drawer {
+  --el-drawer-bg-color: var(--sf-bg-overlay);
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.el-dialog {
+  --el-dialog-bg-color: var(--sf-bg-overlay);
+}
+
+/* ── 动画 ── */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--sf-transition);
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform var(--sf-transition), opacity var(--sf-transition);
+}
+.slide-enter-from {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+.slide-leave-to {
+  transform: translateX(-20px);
+  opacity: 0;
 }

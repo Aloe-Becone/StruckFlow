@@ -15,7 +15,7 @@ import time
 from pathlib import Path
 from typing import Any, Literal
 
-from memory.embedding import cosine_similarity
+from .embedding import cosine_similarity
 
 
 # 检索模式
@@ -66,13 +66,14 @@ class JsonMemoryStore:
             "sentence_vec": item.get("sentence_vec", []),
             "task_vec": item.get("task_vec", []),
             "tags": item.get("tags", []),
+            "performance": item.get("performance", {}),
         }
 
     def _save(self) -> None:
         """将当前记忆集合写回磁盘。"""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         payload = {
-            "version": "memcollm-json-0.2",
+            "version": "memcollm-json-0.3",
             "updated_at": time.time(),
             "items": self.items,
         }
@@ -94,10 +95,12 @@ class JsonMemoryStore:
         task_topic: str = "",
         summary: str = "",
         tags: list[str] | None = None,
+        metrics: dict[str, Any] | None = None,
     ) -> str:
         """新增一条记忆单元并返回其 ID。
 
         支持 sentence_vec 和 task_vec 两种粒度的向量。
+        metrics 可包含该步骤的性能指标：token_usage, duration_seconds 等。
         """
         memory_id = f"mem-{len(self.items) + 1:04d}"
         normalized_content = content if isinstance(content, dict) else {"value": content}
@@ -108,6 +111,22 @@ class JsonMemoryStore:
             auto_tags.append(role)
         if mode not in auto_tags:
             auto_tags.append(mode)
+
+        # 规范化性能指标
+        performance = {}
+        if metrics:
+            token_usage = metrics.get("token_usage", {})
+            performance = {
+                "total_tokens": token_usage.get("total_tokens", 0),
+                "prompt_tokens": token_usage.get("prompt_tokens", 0),
+                "completion_tokens": token_usage.get("completion_tokens", 0),
+                "precise_chars": metrics.get("precise_chars", 0),
+                "duration_seconds": metrics.get("duration_seconds", 0),
+                "memory_hits": metrics.get("memory_hits", 0),
+                "semantic_transfers": metrics.get("semantic_transfers", 0),
+                "semantic_bytes": metrics.get("semantic_bytes", 0),
+                "control_decisions": metrics.get("control_decisions", 0),
+            }
 
         self.items.append(
             {
@@ -123,6 +142,7 @@ class JsonMemoryStore:
                 "task_vec": task_vec or [],
                 "created_at": time.time(),
                 "tags": auto_tags,
+                "performance": performance,
             }
         )
         self._save()
@@ -303,6 +323,7 @@ class JsonMemoryStore:
                 "summary": item.get("summary", ""),
                 "tags": item.get("tags", []),
                 "content_keys": list(item.get("content", {}).keys()),
+                "performance": item.get("performance", {}),
             }
             for item in self.items
         ]

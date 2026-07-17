@@ -8,10 +8,6 @@
 
 from typing import Any
 
-from agents.workflow import MultiAgentSystem
-from comparison.text_runner import TextModeRunner
-from framework.json_utils import pretty_json
-
 
 def build_comparison(
     structured_result: dict[str, Any],

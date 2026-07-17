@@ -16,12 +16,12 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 
-from agents.prompts import ROLE_PROMPTS
-from agents.state import AgentState
-from framework.json_utils import compact_json, safe_json_loads
-from memory.embedding import QwenEmbeddingService
-from memory.store import JsonMemoryStore
-from metrics.recorder import (
+from .prompts import ROLE_PROMPTS
+from .state import AgentState
+from ..framework.json_utils import compact_json, safe_json_loads
+from ..memory.embedding import QwenEmbeddingService
+from ..memory.store import JsonMemoryStore
+from ..metrics.recorder import (
     TransferMode,
     finalize_metrics,
     merge_token_usage,
@@ -30,7 +30,7 @@ from metrics.recorder import (
     record_agent_turn,
     semantic_vectors_bytes,
 )
-from protocol.g2cp import (
+from ..protocol.g2cp import (
     AGENT_PRECISE_INPUTS,
     AgentName,
     ControlInfo,
@@ -42,7 +42,7 @@ from protocol.g2cp import (
     decide_next_agent,
     semantic_vectors_bytes as proto_semantic_bytes,
 )
-from tools.web_search import DisabledSearchTool, SearxngSearchTool
+from ..tools.web_search import DisabledSearchTool, SearxngSearchTool
 
 
 class MultiAgentSystem:
@@ -209,19 +209,7 @@ class MultiAgentSystem:
         # ── 6. Control 层：路由决策（零 token，不问 LLM）──
         next_agent = decide_next_agent(role, precise_output, control)
 
-        # ── 7. 记忆化：写入共享记忆 ──
-        memory_id = self.memory.add(
-            role,
-            precise_output,
-            sentence_vec,
-            task_vec=task_vec,
-            mode="structured",
-            trace_id=state["trace_id"],
-            task_topic=state.get("user_question", ""),
-            tags=[role],
-        )
-
-        # ── 8. 指标记录 ──
+        # ── 7. 指标记录 ──
         metrics = state.get("metrics", new_metrics("structured"))
         record_agent_turn(
             metrics,
@@ -234,6 +222,20 @@ class MultiAgentSystem:
             memory_hits=len(memory_hits),
             non_text_state_transfers=1,
             non_text_state_bytes=proto_semantic_bytes(semantic),
+        )
+
+        # ── 8. 记忆化：写入共享记忆（附带本步性能指标）──
+        turn_metrics = metrics["turns"][-1] if metrics.get("turns") else {}
+        memory_id = self.memory.add(
+            role,
+            precise_output,
+            sentence_vec,
+            task_vec=task_vec,
+            mode="structured",
+            trace_id=state["trace_id"],
+            task_topic=state.get("user_question", ""),
+            tags=[role],
+            metrics=turn_metrics,
         )
 
         # ── 9. 状态更新 ──

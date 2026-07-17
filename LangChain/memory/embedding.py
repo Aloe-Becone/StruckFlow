@@ -13,7 +13,7 @@ from typing import Iterable
 import torch
 from sentence_transformers import SentenceTransformer
 
-from framework.config import Settings
+from ..framework.config import Settings
 
 
 @dataclass(frozen=True)

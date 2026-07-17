@@ -24,19 +24,19 @@ from typing import Any
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 
-from comparison.text_metrics import (
+from .text_metrics import (
     finalize_text_metrics,
     new_text_metrics,
     record_text_turn,
     text_normalize_usage,
 )
-from comparison.text_prompts import (
+from .text_prompts import (
     TEXT_AGENT_SEQUENCE,
     TEXT_NEXT_AGENT_MAP,
     TEXT_ROLE_PROMPTS,
     TextAgentName,
 )
-from framework.config import Settings
+from ..framework.config import Settings
 
 
 def build_text_model(settings: Settings) -> ChatOpenAI:

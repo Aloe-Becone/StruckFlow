@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI
 
-from framework.config import Settings
+from .config import Settings
 
 
 def build_chat_model(settings: Settings) -> ChatOpenAI:
