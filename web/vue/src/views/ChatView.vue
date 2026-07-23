@@ -72,7 +72,7 @@
     <!-- 对比面板 -->
     <el-drawer
       v-model="compareDrawerVisible"
-      title="结构化 vs 纯文本 对比"
+      title="结构化 / 纯文本 对比"
       direction="rtl"
       size="520px"
       :append-to-body="true"

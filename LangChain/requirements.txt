@@ -1,0 +1,24 @@
+# LangChain 多智能体对话应用 - Python 依赖
+# 兼容 openEuler 24.03-LTS-SP3 (Python 3.11+)
+
+# ── LLM 框架 ──
+langchain>=0.3
+langchain-core>=0.3
+langchain-openai>=0.2
+langchain-community>=0.3
+langgraph>=0.2
+
+# ── 向量存储 ──
+langchain-qdrant>=0.2
+qdrant-client>=1.12
+
+# ── Embedding / GPU ──
+torch>=2.1
+sentence-transformers>=3.0
+
+# ── Web 框架 ──
+flask>=3.0
+flask-cors>=4.0
+
+# ── 工具 ──
+python-dotenv>=1.0

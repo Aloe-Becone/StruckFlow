@@ -1,0 +1,30 @@
+[Unit]
+Description=StruckFlow Backend - 多智能体对话 API 服务
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=struckflow
+Group=struckflow
+WorkingDirectory=/usr/lib/struckflow
+ExecStart=/usr/lib/struckflow/venv/bin/python web/flask/app.py
+Restart=on-failure
+RestartSec=5
+StartLimitBurst=3
+StartLimitIntervalSec=60
+
+# 环境变量
+EnvironmentFile=/usr/lib/struckflow/LangChain/.env
+
+# 安全加固
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/struckflow /usr/lib/struckflow/LangChain/.env /usr/lib/struckflow/data
+
+# 资源限制
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
